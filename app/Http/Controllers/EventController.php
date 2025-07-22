@@ -16,6 +16,6 @@ class EventController extends Controller
             'tanggal_event' => $request->tanggal_event,
             'user_id' => Auth::id(),
         ]);
-        return redirect()->back()->with('success', 'Event berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Event berhasil ditambahkan!')->withInput();
     }
 }
