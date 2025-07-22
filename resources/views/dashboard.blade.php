@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <x-danger-button x-on:click="$dispatch('close')">
+                    <x-secondary-button x-on:click="$dispatch('close')">
                         Batal
-                    </x-danger-button>
+                    </x-secondary-button>
 
                     <x-primary-button class="ml-3">
                         Simpan
@@ -46,6 +46,26 @@
                 </div>
                 <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-end ">
                     <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'tambah-event')" ><i class="fa-solid fa-plus pr-2"></i> Tambah Event</x-primary-button>
+                </div>
+                <div class="p-4">
+                    <table class="w-full border border-black">
+                        <tr class="w-full border border-black">
+                            <th class="border border-black">Nama Acara</th>
+                            <th class="border border-black">Deskripsi</th>
+                            <th class="border border-black">Waktu</th>
+                            <th class="border border-black">Aksi</th>
+                        </tr>
+                        <tr class="w-full border border-black">
+                            @forelse($events as $event)
+                            <td class="border border-black p-2">{{$event->judul}}</td>
+                            <td class="border border-black p-2">{{$event->deskripsi}}</td>
+                            <td class="border border-black p-2">{{$event->tanggal_event}}</td>
+                            <td class="border border-black p-2"></td>
+                        </tr>   
+                        @empty
+                        <h2>Tidak ada Event</h2>
+                        @endforelse
+                    </table>
                 </div>
             </div>
         </div>
