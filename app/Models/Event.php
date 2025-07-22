@@ -12,6 +12,7 @@ class Event extends Model
         'judul',
         'deskripsi',
         'tanggal_event',
+        'user_id'
     ];
 
     public function users():BelongsTo {

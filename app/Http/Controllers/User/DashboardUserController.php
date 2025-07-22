@@ -13,7 +13,8 @@ class DashboardUserController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        return view('dashboard', compact('user'));
     }
 
     /**
@@ -37,8 +38,7 @@ class DashboardUserController extends Controller
      */
     public function show()
     {
-        $user = Auth::user();
-        return view('dashboard', compact('user'));
+        //
     }
 
     /**
