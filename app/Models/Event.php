@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+
 
 class Event extends Model
 {
@@ -17,5 +18,11 @@ class Event extends Model
 
     public function users():BelongsTo {
         return $this->belongsTo(User::class); 
+    }
+
+    public function getTanggalFormattedAttribute(){
+        Carbon::setLocale('id');
+
+        return Carbon::parse($this->tanggal_event)->translatedFormat('l, d F Y, H:i');
     }
 }
