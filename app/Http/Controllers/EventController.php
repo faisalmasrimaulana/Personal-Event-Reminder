@@ -16,6 +16,26 @@ class EventController extends Controller
             'tanggal_event' => $request->tanggal_event,
             'user_id' => Auth::id(),
         ]);
-        return redirect()->back()->with('success', 'Event berhasil ditambahkan!')->withInput();
+        return redirect()->back()->with('success', 'Event Berhasil Ditambahkan!')->withInput();
     }
+
+    public function update(StoreEventRequest $request, $id)
+    {   
+        $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $event->update([
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'tanggal_event' => $request->tanggal_event,
+        ]);
+
+        return redirect()->back()->with('success', 'Event Berhasil Diperbarui');
+    }
+
+    public function destroy($id){
+        $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        $event->delete();
+        return redirect()->back()->with('success', 'Event Berhasil Dihapus');
+    }
+
 }
