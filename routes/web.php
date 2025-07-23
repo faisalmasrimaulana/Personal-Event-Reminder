@@ -16,6 +16,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/event', [EventController::class, 'store'])->name('event.store');
+    Route::put('event/update/{event}', [EventController::class, 'update'])->name('event.update');
+    Route::delete('event/delete/{event}', [EventController::class, 'destroy'])->name('event.delete');
 });
 
 require __DIR__.'/auth.php';
