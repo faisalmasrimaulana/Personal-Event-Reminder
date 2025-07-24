@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
+use App\Mail\EventReminder;
+use App\Models\Event;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/event', [EventController::class, 'store'])->name('event.store');
     Route::put('event/update/{event}', [EventController::class, 'update'])->name('event.update');
     Route::delete('event/delete/{event}', [EventController::class, 'destroy'])->name('event.delete');
+    Route::get('/test-email/{event}', function ($eventId) {
+    $event = Event::findOrFail($eventId);
+    Mail::to('recipient@example.com')->send(new EventReminder($event));
+    return 'Email telah dikirim!';
+    });
 });
 
 require __DIR__.'/auth.php';

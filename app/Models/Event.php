@@ -13,11 +13,11 @@ class Event extends Model
         'judul',
         'deskripsi',
         'tanggal_event',
-        'user_id'
+        'user_id',
     ];
 
-    public function users():BelongsTo {
-        return $this->belongsTo(User::class); 
+    public function user():BelongsTo {
+        return $this->belongsTo(User::class, 'user_id', 'id'); 
     }
 
     public function getTanggalFormattedAttribute(){
