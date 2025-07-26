@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -39,6 +41,30 @@ class EventController extends Controller
 
         $status = $event->is_done ? 'ditandai selesai' : 'ditandai belum selesai';
         return redirect()->back()->with('success', "Event berhasil $status.");
+    }
+
+    public function note(Request $request, $id)
+    {
+        // Validasi manual
+        $validator = Validator::make($request->all(), [
+            'note' => 'nullable|string|max:1000', // contoh maksimal 1000 karakter
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('open_modal', 'note-event-' . $id);
+        }
+
+        $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $event->update([
+            'note' => $request->note,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'Catatan Berhasil Ditambahkan')
+            ->with('open_modal', 'note-event-' . $event->id);
     }
 
     public function destroy($id){
