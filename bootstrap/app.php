@@ -18,4 +18,5 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })->withSchedule(function (Schedule $schedule) {
     $schedule->command('email:send-event-reminder')->everyMinute();
+    $schedule->command('app:update-event-status')->everyMinute();
 })->create();
