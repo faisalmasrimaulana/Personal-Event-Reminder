@@ -31,6 +31,16 @@ class EventController extends Controller
         return redirect()->back()->with('success', 'Event Berhasil Diperbarui');
     }
 
+    public function change($id){
+        $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $event->update([
+            'is_done' => !$event->is_done,
+        ]);
+
+        $status = $event->is_done ? 'ditandai selesai' : 'ditandai belum selesai';
+        return redirect()->back()->with('success', "Event berhasil $status.");
+    }
+
     public function destroy($id){
         $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
 
