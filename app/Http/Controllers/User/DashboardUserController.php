@@ -15,7 +15,7 @@ class DashboardUserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $events = Event::where('user_id', $user->id)->orderBy('tanggal_event', 'asc')->paginate(10);
+        $events = Event::where('user_id', $user->id)->orderBy('is_done', 'asc')->orderBy('tanggal_event', 'asc')->paginate(10);
         return view('dashboard', compact('user', 'events'));
     }
 }
