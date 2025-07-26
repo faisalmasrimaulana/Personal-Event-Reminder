@@ -116,6 +116,28 @@
         </div>
         @endforeach
 
+        <!-- MODAL DONE EVENT -->
+        @foreach($events as $event)
+        <div>
+            <x-modal name="selesaikan-event-{{$event->id}}">
+                <div class="flex flex-col items-center justify-center p-6">
+                    <h2 class="text-lg font-medium text-gray-800 dark:text-white mb-4">
+                        Yakin ingin {{ $event->is_done ? 'membatalkan tanda selesai' : 'menyelesaikan' }} event <strong>{{ $event->judul }}</strong>?
+                    </h2>
+
+                    <form method="POST" action="{{ route('event.change', $event->id) }}">
+                        @csrf
+                        @method('PATCH')
+                        <div class="flex justify-end">
+                            <x-secondary-button x-on:click="$dispatch('close')">Batal</x-secondary-button>
+                            <x-primary-button class="ml-3">{{ $event->is_done ? 'Batalkan Selesai' : 'Selesaikan' }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            </x-modal>
+        </div>
+        @endforeach
+
         <!-- DASHBOARD -->
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -126,6 +148,7 @@
                     <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'tambah-event')" ><i class="fa-solid fa-plus pr-2"></i> Tambah Event</x-primary-button>
                 </div>
                 <!-- LIST EVENT YAaNG BELUM SELESAI -->
+
                 <div class="p-4">
                     <table class="w-full border-2 border-opacity-20  border-gray-400">
                         <tr class="w-full border-2 border-opacity-20 border-gray-400">
@@ -139,13 +162,20 @@
                             <td class="border-2 border-opacity-20 border-gray-400 p-2">{{$event->judul}}</td>
                             <td class="border-2 border-opacity-20 border-gray-400 p-2">{{$event->deskripsi ?: '-' }}</td>
                             <td class="border-2 border-opacity-20 border-gray-400 p-2">{{$event->tanggal_formatted}} 
-                            @if($event->waktu_event)
-                            <span class="text-sm italic px-2 rounded-md {{ str_contains($event->waktu_event, 'Event sedang berlangsung') ? 'bg-blue-100 text-blue-500' : 'bg-green-100 text-green-500' }}">{{$event->waktu_event}}</span></td>
-                            @endif
+                                @if(str_contains($event->waktu_event, 'sedang berlangsung'))
+                                <span class="text-sm italic px-2 rounded-md bg-blue-100 text-blue-500">{{$event->waktu_event}}</span>
+                                @elseif($event->is_done)
+                                <span class="text-sm italic px-2 rounded-md bg-gray-100 text-gray-500">{{$event->waktu_event}}</span>
+                                @elseif(!$event->is_done)
+                                <span class="text-sm italic px-2 rounded-md bg-green-100 text-green-500">{{$event->waktu_event}}</span>
+                                @endif
+                            </td>
                             <td class="border-2 border-opacity-20  border-gray-400 p-2">
                                 <div class="flex justify-center align-middle gap-5">
                                     <i class="fa-solid fa-pen-to-square text-blue-600 text-lg hover:-translate-y-1 hover:cursor-pointer" x-data="" x-on:click.prevent="$dispatch('open-modal', 'edit-event-{{$event->id}}')" title="Edit"></i>
-                                    <i class="fa-solid fa-square-check text-green-600 text-lg hover:-translate-y-1 hover:cursor-pointer" title="Tandai Selesai"></i>
+                                    @if($event->kadaluarsa)
+                                    <i class="fa-solid {{!$event->is_done ? 'fa-square-check' : 'fa-square-xmark'}} {{!$event->is_done ? 'text-green-600' : 'text-red-400'}} text-lg hover:-translate-y-1 hover:cursor-pointer" x-data="" x-on:click.prevent="$dispatch('open-modal', 'selesaikan-event-{{$event->id}}')" title="Selesai" title="Tandai Selesai"></i>
+                                    @endif
                                     <i class="fa-solid fa-note-sticky text-yellow-500 text-lg hover:-translate-y-1 hover:cursor-pointer" title="Buat Catatan"></i>
                                     <i class="fa-solid fa-trash-can text-red-500 text-lg hover:-translate-y-1 hover:cursor-pointer" title="Hapus" x-data="" x-on:click.prevent="$dispatch('open-modal', 'hapus-event-{{$event->id}}')" title="Hapus"></i>
                                 </div>
@@ -159,8 +189,6 @@
                         {{$events->links()}}
                     </div>
                 </div>
-
-                <!-- LIST EVENT YANG TELAH SELESAI -->
             </div>
         </div>
     </div>
