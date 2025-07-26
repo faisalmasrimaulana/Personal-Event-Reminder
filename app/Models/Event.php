@@ -14,6 +14,8 @@ class Event extends Model
         'deskripsi',
         'tanggal_event',
         'user_id',
+        'note',
+        'is_done'
     ];
 
     public function user():BelongsTo {
@@ -30,19 +32,27 @@ class Event extends Model
         $eventTime = Carbon::parse($this->tanggal_event)->timezone(config('app.timezone'));
         $selisihJam = $now->diffInHours($eventTime, false);
 
-        if ($now->lessThan($eventTime) && $selisihJam < 24) {
+        if ($now->lessThan($eventTime) && $selisihJam < 24 && !$this->is_done) {
             return 'Event dimulai dalam ' . $eventTime->diffForHumans($now, true) . ' lagi';
         }
 
-        if ($now->greaterThan($eventTime) && abs($selisihJam) <= 12) {
+        if ($now->greaterThan($eventTime) && abs($selisihJam) <= 12 && !$this->is_done) {
             return 'Event sedang berlangsung sejak ' . $eventTime->diffForHumans($now);
         }
 
-        if ($now->greaterThan($eventTime) && abs($selisihJam) > 12) {
+        if ($now->greaterThan($eventTime) && abs($selisihJam) > 12 || $this->is_done) {
             return 'Event telah berakhir';
         }
-
         return null;
     }
 
+    public function getKadaluarsaAttribute(){
+        $now = now();
+        $eventTime = Carbon::parse($this->tanggal_event)->timezone(config('app.timezone'));
+        $selisihJam = $now->diffInHours($eventTime, false);
+        if ($now->greaterThan($eventTime) && abs($selisihJam) > 12 && $this->is_done) {
+            return false;
+        }
+        return true;
+    }
 }
