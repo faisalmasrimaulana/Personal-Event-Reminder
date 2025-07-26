@@ -95,6 +95,31 @@
             </x-modal>
         @endforeach
 
+        <!-- MODAL NOTE EVENT -->
+        @foreach($events as $event)
+            <x-modal name="note-event-{{$event->id}}" focusable :show="$errors->any()">
+                <form action="{{route('event.note', $event->id)}}" class="p-6" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <h2 class="text-lg text-black dark:text-white font-bold text-center">Catatan</h2>
+                    <div class="mt-4">
+                        <x-input-label for="note" value="Catatan {{$event->judul}}"/>
+                        <textarea rows="10" id="note" name="note" class="mt-1 block w-full rounded-md shadow-sm ">{{old('note', $event->note)}}</textarea>
+                        <x-input-error :messages="$errors->get('note')" class="mt-2"/>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <x-secondary-button x-on:click="$dispatch('close')">
+                            Batal
+                        </x-secondary-button>
+
+                        <x-primary-button class="ml-3">
+                            Simpan
+                        </x-primary-button>
+                    </div>
+                </form>
+            </x-modal>
+        @endforeach
+
         <!-- MODAL DELETE EVENT -->
         @foreach($events as $event)
         <div>
@@ -176,7 +201,7 @@
                                     @if($event->kadaluarsa)
                                     <i class="fa-solid {{!$event->is_done ? 'fa-square-check' : 'fa-square-xmark'}} {{!$event->is_done ? 'text-green-600' : 'text-red-400'}} text-lg hover:-translate-y-1 hover:cursor-pointer" x-data="" x-on:click.prevent="$dispatch('open-modal', 'selesaikan-event-{{$event->id}}')" title="Selesai" title="Tandai Selesai"></i>
                                     @endif
-                                    <i class="fa-solid fa-note-sticky text-yellow-500 text-lg hover:-translate-y-1 hover:cursor-pointer" title="Buat Catatan"></i>
+                                    <i class="fa-solid fa-note-sticky text-yellow-500 text-lg hover:-translate-y-1 hover:cursor-pointer" x-data="" x-on:click.prevent="$dispatch('open-modal', 'note-event-{{$event->id}}')" title="Buat Catatan"></i>
                                     <i class="fa-solid fa-trash-can text-red-500 text-lg hover:-translate-y-1 hover:cursor-pointer" title="Hapus" x-data="" x-on:click.prevent="$dispatch('open-modal', 'hapus-event-{{$event->id}}')" title="Hapus"></i>
                                 </div>
                             </td>
