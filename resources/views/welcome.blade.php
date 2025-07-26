@@ -1,58 +1,59 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome - Personal Reminder</title>
 
-        <title>EventAppReminder</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+    <!-- Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-        <!-- Styles / Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Dashboard
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
+<body class="bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#ededec] min-h-screen flex items-center justify-center px-6 py-10">
 
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main class="flex max-w-[335px] w-full">
-                <div class="flex align-center justify-center mb-20">
-                    <h1 class="font-bold text-xl">Welcome To Personal Reminder</h1>
-                </div>
-            </main>
+    <div class="max-w-2xl w-full flex flex-col items-center text-center gap-6">
+        <!-- Icon -->
+        <div class="text-blue-600 text-6xl lg:text-7xl animate-bounce">
+            <i class="fa-solid fa-list-check"></i>
         </div>
 
-        @if (Route::has('login'))
-            <div class="h-14.5 hidden lg:block"></div>
-        @endif
-    </body>
+        <!-- Title -->
+        <h1 class="text-3xl lg:text-5xl font-bold leading-tight">
+            Selamat Datang di <span class="text-blue-600">Personal Reminder</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base lg:text-lg text-gray-600 dark:text-gray-300">
+            Buat hidupmu lebih terorganisir ✨<br class="hidden lg:inline">
+            Catat jadwal penting dan dapatkan pengingat tepat waktu.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-4">
+            @auth
+                <a href="{{ url('/dashboard') }}"
+                   class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-semibold">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Dashboard
+                </a>
+            @else
+                <a href="{{ route('login') }}"
+                   class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-semibold">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> Masuk
+                </a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}"
+                       class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition text-sm font-semibold">
+                        <i class="fa-solid fa-user-plus mr-2"></i> Daftar
+                    </a>
+                @endif
+            @endauth
+        </div>
+    </div>
+
+</body>
 </html>
