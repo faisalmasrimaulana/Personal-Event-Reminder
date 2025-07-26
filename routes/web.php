@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/event', [EventController::class, 'store'])->name('event.store');
     Route::put('event/update/{event}', [EventController::class, 'update'])->name('event.update');
+    Route::patch('event/selesaikan/{event}', [EventController::class, 'change'])->name('event.change');
     Route::delete('event/delete/{event}', [EventController::class, 'destroy'])->name('event.delete');
     Route::get('/test-email/{event}', function ($eventId) {
     $event = Event::findOrFail($eventId);
